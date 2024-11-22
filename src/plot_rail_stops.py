@@ -16,7 +16,7 @@ def load_rail_stops(file_path):
         return None
 
 # Create a map and plot the Luas line stops and DART stations
-def plot_rail_stops(green_stops, red_stops, dart_stations):
+def plot_rail_stops(green_stops, red_stops, dart_stations, intercity_stations, commuter_stations):
     
     # Center the map around Dublin
     map_dublin = folium.Map(location=[53.349805, -6.26031], zoom_start=12)
@@ -25,6 +25,8 @@ def plot_rail_stops(green_stops, red_stops, dart_stations):
     green_line_layer = FeatureGroup(name="Luas Green Line")
     red_line_layer = FeatureGroup(name="Luas Red Line")
     dart_layer = FeatureGroup(name="DART Line")
+    intercity_layer = FeatureGroup(name="Intercity Lines")
+    commuter_layer = FeatureGroup(name="Commuter Rail Lines")
 
     # Add Green Line Stops to the map
     for _, stop in green_stops.iterrows():
@@ -83,10 +85,59 @@ def plot_rail_stops(green_stops, red_stops, dart_stations):
         )
         marker.add_to(dart_layer)  # Add to DART layer
 
+    # Add intercity stations to the map
+    for _, stop in intercity_stations.iterrows():
+        # Check the structure of the current stop object
+        print(stop)  # To see the columns and structure of the stop
+
+        # Access coordinates from geometry
+        coords = stop.geometry.coords[0]  # Get coordinates from the Point geometry
+        # Safely access the "properties" field
+        properties = stop.get('properties', {})  # Default to an empty dictionary if 'properties' is missing
+        name = properties.get("name", "Unknown Name")  # Access the "name" property safely
+        description = properties.get("description", 'No description')  # Access the "description" property, with a fallback
+
+        # Print the coordinates and properties for debugging
+        print(f"Intercity Line - Name: {name}, Coordinates: {coords}")
+
+        # Create a marker for each stop with a popup
+        marker = folium.Marker(
+            location=[coords[1], coords[0]],  # Latitude, Longitude (ensure correct order)
+            popup=f"<b>{name}</b><br>{description}",
+            icon=folium.Icon(color="blue", icon="info-sign")
+        )
+        marker.add_to(intercity_layer)  # Add to Intercity layer
+
+    # Add commuter stations to the map
+    for _, stop in commuter_stations.iterrows():
+        # Check the structure of the current stop object
+        print(stop)  # To see the columns and structure of the stop
+
+        # Access coordinates from geometry
+        coords = stop.geometry.coords[0]  # Get coordinates from the Point geometry
+        # Safely access the "properties" field
+        properties = stop.get('properties', {})  # Default to an empty dictionary if 'properties' is missing
+        name = properties.get("name", "Unknown Name")  # Access the "name" property safely
+        description = properties.get("description", 'No description')  # Access the "description" property, with a fallback
+
+        # Print the coordinates and properties for debugging
+        print(f"Commuter Line - Name: {name}, Coordinates: {coords}")
+
+        # Create a marker for each stop with a popup
+        marker = folium.Marker(
+            location=[coords[1], coords[0]],  # Latitude, Longitude (ensure correct order)
+            popup=f"<b>{name}</b><br>{description}",
+            icon=folium.Icon(color="orange", icon="info-sign")
+        )
+        marker.add_to(commuter_layer)  # Add to Commuter layer
+
+
     # Add the layers to the map
     green_line_layer.add_to(map_dublin)
     red_line_layer.add_to(map_dublin)
     dart_layer.add_to(map_dublin)
+    intercity_layer.add_to(map_dublin)
+    commuter_layer.add_to(map_dublin)
 
     # Add layer control to toggle between layers (Green Line, Red Line)
     folium.LayerControl().add_to(map_dublin)
@@ -100,15 +151,19 @@ def main():
     green_file_path = "./data/luas_stops_green.geojson"
     red_file_path = "./data/luas_stops_red.geojson"
     dart_file_path = "./data/dart_stations.geojson"
+    intercity_file_path = "./data/intercity_rail_stations.geojson"
+    commuter_file_path = "./data/dublin_commuter_stations.geojson"
 
     # Load the Green and Red line stop data
     green_stops = load_rail_stops(green_file_path)
     red_stops = load_rail_stops(red_file_path)
     dart_stations = load_rail_stops(dart_file_path)
+    intercity_stations = load_rail_stops(intercity_file_path)
+    commuter_stations = load_rail_stops(commuter_file_path)
 
     # If all datasets are successfully loaded, plot the stops on the map
-    if green_stops is not None and red_stops is not None and dart_stations is not None:
-        plot_rail_stops(green_stops, red_stops, dart_stations)
+    if green_stops is not None and red_stops is not None and dart_stations is not None and intercity_stations is not None and commuter_stations is not None:
+        plot_rail_stops(green_stops, red_stops, dart_stations, intercity_stations, commuter_stations)
     else:
         print("One or more datasets failed to load.")
 
