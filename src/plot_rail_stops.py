@@ -143,8 +143,8 @@ def plot_rail_stops(green_stops, red_stops, dart_stations, intercity_stations, c
     folium.LayerControl().add_to(map_dublin)
 
     # Save the map to an HTML file
-    map_dublin.save(os.path.join(OUTPUT_DIR, "luas_map.html"))
-    print("Map has been saved as 'luas_map.html'.")
+    map_dublin.save(os.path.join(OUTPUT_DIR, "rail_map.html"))
+    print("Map has been saved as 'rail_map.html'.")
 
 def main():
     # Paths to the GeoJSON files for Green and Red lines
