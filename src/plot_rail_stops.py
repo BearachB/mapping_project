@@ -146,6 +146,25 @@ def plot_rail_stops(green_stops, red_stops, dart_stations, intercity_stations, c
     map_dublin.save(os.path.join(OUTPUT_DIR, "rail_map.html"))
     print("Map has been saved as 'rail_map.html'.")
 
+def enable_pin_placement(map_object):
+    """
+    Add functionality to place a pin on the map by clicking.
+    """
+    from folium import Marker
+    from folium.plugins import MousePosition
+    
+    # Add Mouse Position for latitude/longitude feedback
+    MousePosition().add_to(map_object)
+
+    # Handle click events
+    def on_click(e):
+        lat, lon = e.latlng  # Get latitude and longitude from the event
+        print(f"User clicked at: {lat}, {lon}")
+        folium.Marker(location=[lat, lon], icon=folium.Icon(color="blue", icon="map-pin")).add_to(map_object)
+    
+    # Attach the event to the map (this requires custom JS integration)
+    map_object.add_child(folium.ClickForMarker())
+
 def main():
     # Paths to the GeoJSON files for Green and Red lines
     green_file_path = "./data/luas_stops_green.geojson"
