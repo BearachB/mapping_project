@@ -2,6 +2,11 @@ import geopandas as gpd
 import folium
 import os
 from folium import FeatureGroup
+# from folium import Map
+# from folium.plugins import MousePosition
+# from folium import Element
+from geopy.geocoders import Nominatim
+# from folium import plugins
 
 # Define the project root and target save directory
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # Root of the project
@@ -142,28 +147,49 @@ def plot_rail_stops(green_stops, red_stops, dart_stations, intercity_stations, c
     # Add layer control to toggle between layers (Green Line, Red Line)
     folium.LayerControl().add_to(map_dublin)
 
+    # Add search functionality to the map
+    add_search_functionality(map_dublin)
+
     # Save the map to an HTML file
     map_dublin.save(os.path.join(OUTPUT_DIR, "rail_map.html"))
     print("Map has been saved as 'rail_map.html'.")
 
-def enable_pin_placement(map_object):
+def add_search_functionality(map_object):
     """
-    Add functionality to place a pin on the map by clicking.
+    Adds a search function to the Folium map to zoom to an entered address.
     """
-    from folium import Marker
-    from folium.plugins import MousePosition
-    
-    # Add Mouse Position for latitude/longitude feedback
-    MousePosition().add_to(map_object)
+    geolocator = Nominatim(user_agent="geo_search")
 
-    # Handle click events
-    def on_click(e):
-        lat, lon = e.latlng  # Get latitude and longitude from the event
-        print(f"User clicked at: {lat}, {lon}")
-        folium.Marker(location=[lat, lon], icon=folium.Icon(color="blue", icon="map-pin")).add_to(map_object)
-    
-    # Attach the event to the map (this requires custom JS integration)
-    map_object.add_child(folium.ClickForMarker())
+    # HTML and JavaScript for a search bar and geocoding functionality
+    search_bar = """
+    <div style="position: fixed; top: 10px; left: 5%; z-index: 1000; background-color: white; padding: 10px; border-radius: 5px; box-shadow: 2px 2px 5px rgba(0,0,0,0.3);">
+        <input id="addressInput" type="text" placeholder="Enter an address" style="width: 200px; padding: 5px;">
+        <button onclick="geocodeAndZoom()" style="padding: 5px;">Search</button>
+    </div>
+    <script>
+    async function geocodeAndZoom() {
+        const address = document.getElementById("addressInput").value;
+        if (!address) {
+            alert("Please enter an address!");
+            return;
+        }
+
+        const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`);
+        const results = await response.json();
+        
+        if (results.length > 0) {
+            const lat = parseFloat(results[0].lat);
+            const lon = parseFloat(results[0].lon);
+            map.setView([lat, lon], 15); // Zoom level 15
+        } else {
+            alert("Address not found!");
+        }
+    }
+    </script>
+    """
+
+    # Add the HTML/JS to the map as a child element
+    map_object.get_root().html.add_child(folium.Element(search_bar))
 
 def main():
     # Paths to the GeoJSON files for Green and Red lines
