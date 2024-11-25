@@ -44,7 +44,7 @@ def plot_rail_stops(green_stops, red_stops, dart_stations, intercity_stations, c
         description = stop["Description"]  # Access the "Description" property
 
         # Print the coordinates and properties for debugging
-        print(f"Green Line - Name: {name}, Coordinates: {coords}")
+        # print(f"Green Line - Name: {name}, Coordinates: {coords}")
 
         # Create a marker for each stop with a popup
         marker = folium.Marker(
@@ -61,7 +61,7 @@ def plot_rail_stops(green_stops, red_stops, dart_stations, intercity_stations, c
         description = stop["Description"]  # Access the "Description" property
 
         # Print the coordinates and properties for debugging
-        print(f"Red Line - Name: {name}, Coordinates: {coords}")
+        # print(f"Red Line - Name: {name}, Coordinates: {coords}")
 
         # Create a marker for each stop with a popup
         marker = folium.Marker(
@@ -80,8 +80,8 @@ def plot_rail_stops(green_stops, red_stops, dart_stations, intercity_stations, c
         coords = stop.geometry.coords[0]  # Get coordinates from the Point geometry
         # Safely access the "properties" field
         properties = stop.get('properties', {})  # Default to an empty dictionary if 'properties' is missing
-        name = properties.get("name", "Unknown Name")  # Access the "name" property safely
-        description = properties.get("description", 'No description')  # Access the "description" property, with a fallback
+        name = stop.get("name", "Unknown Name")  # Access the "name" property safely
+        description = stop.get("description", 'No description')  # Access the "description" property, with a fallback
 
         # Print the coordinates and properties for debugging
         print(f"DART Line - Name: {name}, Coordinates: {coords}")
@@ -97,17 +97,17 @@ def plot_rail_stops(green_stops, red_stops, dart_stations, intercity_stations, c
     # Add intercity stations to the map
     for _, stop in intercity_stations.iterrows():
         # Check the structure of the current stop object
-        print(stop)  # To see the columns and structure of the stop
+        # print(stop)  # To see the columns and structure of the stop
 
         # Access coordinates from geometry
         coords = stop.geometry.coords[0]  # Get coordinates from the Point geometry
         # Safely access the "properties" field
         properties = stop.get('properties', {})  # Default to an empty dictionary if 'properties' is missing
-        name = properties.get("name", "Unknown Name")  # Access the "name" property safely
+        name = stop.get("name", "Unknown Name")  # Access the "name" property safely
         description = properties.get("description", 'No description')  # Access the "description" property, with a fallback
 
         # Print the coordinates and properties for debugging
-        print(f"Intercity Line - Name: {name}, Coordinates: {coords}")
+        # print(f"Intercity Line - Name: {name}, Coordinates: {coords}")
 
         # Create a marker for each stop with a popup
         marker = folium.Marker(
@@ -120,17 +120,17 @@ def plot_rail_stops(green_stops, red_stops, dart_stations, intercity_stations, c
     # Add commuter stations to the map
     for _, stop in commuter_stations.iterrows():
         # Check the structure of the current stop object
-        print(stop)  # To see the columns and structure of the stop
+        # print(stop)  # To see the columns and structure of the stop
 
         # Access coordinates from geometry
         coords = stop.geometry.coords[0]  # Get coordinates from the Point geometry
         # Safely access the "properties" field
         properties = stop.get('properties', {})  # Default to an empty dictionary if 'properties' is missing
-        name = properties.get("name", "Unknown Name")  # Access the "name" property safely
+        name = stop.get("name", "Unknown Name")  # Access the "name" property safely
         description = properties.get("description", 'No description')  # Access the "description" property, with a fallback
 
         # Print the coordinates and properties for debugging
-        print(f"Commuter Line - Name: {name}, Coordinates: {coords}")
+        # print(f"Commuter Line - Name: {name}, Coordinates: {coords}")
 
         # Create a marker for each stop with a popup
         marker = folium.Marker(
