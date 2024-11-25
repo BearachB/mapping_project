@@ -24,56 +24,6 @@ def load_rail_stops(file_path):
         print(f"Error loading GeoJSON file: {e}")
         return None
 
-def add_js_to_html(file_path):
-    
-    # Read the generated HTML file
-    with open(file_path, 'r') as f:
-        html_content = f.read()
-
-    # JavaScript code to insert
-    js_code = """
-    <script>
-        let userMarker;
-
-        async function geocodeAndZoom() {
-            const address = document.getElementById("addressInput").value;
-            if (!address) {
-                alert("Please enter an address!");
-                return;
-            }
-
-            const response = await fetch(`/geocode?address=${encodeURIComponent(address)}`);
-            const result = await response.json();
-            
-            if (response.ok && result.latitude && result.longitude) {
-                const lat = parseFloat(result.latitude);
-                const lon = parseFloat(result.longitude);
-
-                // Zoom the map to the new location
-                map.setView([lat, lon], 15);
-
-                // Remove any existing marker
-                if (userMarker) {
-                    map.removeLayer(userMarker);
-                }
-
-                // Add a marker at the location with a popup
-                userMarker = L.marker([lat, lon]).addTo(map);
-                userMarker.bindPopup(`<b>Address:</b> ${address}`).openPopup();
-            } else {
-                alert(result.error || "Address not found!");
-            }
-        }
-    </script>
-    """
-
-    # Insert the JavaScript just before the closing </body> tag
-    html_content = html_content.replace('</body>', js_code + '</body>')
-
-    # Save the modified HTML content back to the file
-    with open(file_path, 'w') as f:
-        f.write(html_content)
-
 # Create a map and plot the Luas line stops and DART stations
 def plot_rail_stops(green_stops, red_stops, dart_stations, intercity_stations, commuter_stations):
     
@@ -207,10 +157,6 @@ def plot_rail_stops(green_stops, red_stops, dart_stations, intercity_stations, c
     # Save the map to an HTML file
     map_dublin.save(os.path.join(OUTPUT_DIR, "rail_map.html"))
     print("Map has been saved as 'rail_map.html'.")
-
-    output_file_path = os.path.join(OUTPUT_DIR, "rail_map.html")
-    add_js_to_html(output_file_path)
-    print("JavaScript added to 'rail_map.html'.")
 
     return "maps/rail_map.html"
 
