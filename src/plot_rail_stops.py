@@ -10,15 +10,69 @@ from geopy.geocoders import Nominatim
 
 # Define the project root and target save directory
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # Root of the project
-OUTPUT_DIR = os.path.join(PROJECT_DIR, "outputs")
+OUTPUT_DIR = os.path.join(PROJECT_DIR, "backend", "static", "maps")
 
-# Load Luas stop data from GeoJSON
+# Ensure the output directory exists
+if not os.path.exists(OUTPUT_DIR):
+    os.makedirs(OUTPUT_DIR)
+
+# Load stop data from GeoJSON
 def load_rail_stops(file_path):
     try:
         return gpd.read_file(file_path)
     except Exception as e:
         print(f"Error loading GeoJSON file: {e}")
         return None
+
+def add_js_to_html(file_path):
+    
+    # Read the generated HTML file
+    with open(file_path, 'r') as f:
+        html_content = f.read()
+
+    # JavaScript code to insert
+    js_code = """
+    <script>
+        let userMarker;
+
+        async function geocodeAndZoom() {
+            const address = document.getElementById("addressInput").value;
+            if (!address) {
+                alert("Please enter an address!");
+                return;
+            }
+
+            const response = await fetch(`/geocode?address=${encodeURIComponent(address)}`);
+            const result = await response.json();
+            
+            if (response.ok && result.latitude && result.longitude) {
+                const lat = parseFloat(result.latitude);
+                const lon = parseFloat(result.longitude);
+
+                // Zoom the map to the new location
+                map.setView([lat, lon], 15);
+
+                // Remove any existing marker
+                if (userMarker) {
+                    map.removeLayer(userMarker);
+                }
+
+                // Add a marker at the location with a popup
+                userMarker = L.marker([lat, lon]).addTo(map);
+                userMarker.bindPopup(`<b>Address:</b> ${address}`).openPopup();
+            } else {
+                alert(result.error || "Address not found!");
+            }
+        }
+    </script>
+    """
+
+    # Insert the JavaScript just before the closing </body> tag
+    html_content = html_content.replace('</body>', js_code + '</body>')
+
+    # Save the modified HTML content back to the file
+    with open(file_path, 'w') as f:
+        f.write(html_content)
 
 # Create a map and plot the Luas line stops and DART stations
 def plot_rail_stops(green_stops, red_stops, dart_stations, intercity_stations, commuter_stations):
@@ -154,19 +208,24 @@ def plot_rail_stops(green_stops, red_stops, dart_stations, intercity_stations, c
     map_dublin.save(os.path.join(OUTPUT_DIR, "rail_map.html"))
     print("Map has been saved as 'rail_map.html'.")
 
+    output_file_path = os.path.join(OUTPUT_DIR, "rail_map.html")
+    add_js_to_html(output_file_path)
+    print("JavaScript added to 'rail_map.html'.")
+
+    return "maps/rail_map.html"
+
 def add_search_functionality(map_object):
     """
-    Adds a search function to the Folium map to zoom to an entered address.
+    Adds a search function to the Folium map to zoom to an entered address and add a marker.
     """
-    geolocator = Nominatim(user_agent="geo_search")
-
-    # HTML and JavaScript for a search bar and geocoding functionality
     search_bar = """
     <div style="position: fixed; top: 10px; left: 5%; z-index: 1000; background-color: white; padding: 10px; border-radius: 5px; box-shadow: 2px 2px 5px rgba(0,0,0,0.3);">
         <input id="addressInput" type="text" placeholder="Enter an address" style="width: 200px; padding: 5px;">
         <button onclick="geocodeAndZoom()" style="padding: 5px;">Search</button>
     </div>
     <script>
+    let userMarker;
+
     async function geocodeAndZoom() {
         const address = document.getElementById("addressInput").value;
         if (!address) {
@@ -180,7 +239,19 @@ def add_search_functionality(map_object):
         if (results.length > 0) {
             const lat = parseFloat(results[0].lat);
             const lon = parseFloat(results[0].lon);
-            map.setView([lat, lon], 15); // Zoom level 15
+            const displayName = results[0].display_name;
+
+            // Zoom the map to the new location
+            map.setView([lat, lon], 15);
+
+            // Remove any existing marker
+            if (userMarker) {
+                map.removeLayer(userMarker);
+            }
+
+            // Add a marker at the location with a popup
+            userMarker = L.marker([lat, lon]).addTo(map);
+            userMarker.bindPopup(`<b>Address:</b> ${displayName}`).openPopup();
         } else {
             alert("Address not found!");
         }
@@ -190,6 +261,7 @@ def add_search_functionality(map_object):
 
     # Add the HTML/JS to the map as a child element
     map_object.get_root().html.add_child(folium.Element(search_bar))
+
 
 def main():
     # Paths to the GeoJSON files for Green and Red lines
