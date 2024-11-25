@@ -6,63 +6,7 @@
     <title>Dublin Rail Map</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
-    <style>
-        /* Global reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body, html {
-            height: 100%;
-            font-family: 'Roboto', sans-serif;
-        }
-
-        .container {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-
-        header {
-            background-color: #66A182;
-            color: #fff;
-            font-size: 2rem;
-            font-weight: 700;
-            text-align: center;
-            padding: 10px 0;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 10;
-        }
-
-        footer {
-            background-color: #66A182;
-            color: #fff;
-            font-size: 0.9rem;
-            text-align: center;
-            padding: 10px 0;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-
-        #map-container {
-          flex-grow: 1;
-          width: 100%;
-          margin-top: var(--header-height); /* Use dynamic value for margin */
-          margin-bottom: var(--footer-height); /* Use dynamic value for margin */
-          height: calc(100vh - var(--header-height) - var(--footer-height)); /* Adjust height dynamically */
-      }
-
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/map.css') }}">
 </head>
 <body>
     <div class="container">
