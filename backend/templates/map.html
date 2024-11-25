@@ -26,7 +26,7 @@
         }
 
         header {
-            background-color: #333;
+            background-color: #66A182;
             color: #fff;
             font-size: 2rem;
             font-weight: 700;
@@ -39,7 +39,7 @@
         }
 
         footer {
-            background-color: #333;
+            background-color: #66A182;
             color: #fff;
             font-size: 0.9rem;
             text-align: center;
@@ -49,13 +49,13 @@
             width: 100%;
         }
 
-        #map {
-            flex-grow: 1;
-            width: 100%;
-            margin-top: 60px; /* Header height */
-            margin-bottom: 60px; /* Footer height */
-            height: calc(100vh - 120px); /* Total height minus header and footer */
-        }
+        #map-container {
+          flex-grow: 1;
+          width: 100%;
+          margin-top: var(--header-height); /* Use dynamic value for margin */
+          margin-bottom: var(--footer-height); /* Use dynamic value for margin */
+          height: calc(100vh - var(--header-height) - var(--footer-height)); /* Adjust height dynamically */
+      }
 
         iframe {
             width: 100%;
@@ -67,13 +67,30 @@
 <body>
     <div class="container">
         <header>Dublin Rail Map</header>
-
-        <!-- Embed the map as an iframe -->
-        <iframe src="{{ url_for('static', filename=map_file) }}" frameborder="0"></iframe>
-
+        <div id="map-container">
+          <!-- Embed the map as an iframe -->
+          <iframe src="{{ url_for('static', filename=map_file) }}" frameborder="0"></iframe>
+        </div>
         <footer>
             <p>&copy; 2024 Dublin Rail Map. Built with love using Flask and Folium.</p>
         </footer>
     </div>
 </body>
+
+<script>
+  // Function to dynamically set CSS variables for header and footer heights
+  function setDynamicHeights() {
+      const headerHeight = document.querySelector('header').offsetHeight;
+      const footerHeight = document.querySelector('footer').offsetHeight;
+
+      // Set the CSS variables dynamically
+      document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
+      document.documentElement.style.setProperty('--footer-height', `${footerHeight}px`);
+  }
+
+  // Run the function on page load
+  window.addEventListener('load', setDynamicHeights);
+  window.addEventListener('resize', setDynamicHeights); // Optional: Recalculate on resize
+</script>
+
 </html>
