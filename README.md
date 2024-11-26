@@ -69,12 +69,14 @@ mapping_project/
 
 - [x]  Display Luas Green and Red Line stops with interactive markers.
 - [x]  Make layers toggle-able.
-- [x]  Add DART, intercity, and commuter stations to the map.
+- [ ]  Add other datasets to the map.
+  - [x] DART, intercity, and commuter stations
   - [x] Find datasets (https://data.gov.ie, https://overpass-turbo.eu/)
   - [x] Download/integrate datasets from overpass:
-  - [x] `[out:json];
+    - [x] `[out:json];
 node["railway"="station"]["network"~"DART"](51.0,-10.5,55.5,-5.0);
 out body;`
+  - [x] ATM location data.
 - [x]  Add reference data for rail stops.
 - [x]  Port over to Flask as backend server.
 - [x]  Update project structure (change output map name). 
