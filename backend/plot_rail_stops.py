@@ -86,11 +86,17 @@ def plot_rail_stops(green_stops, red_stops, dart_stations, intercity_stations, c
     # Add layer control to toggle between layers
     folium.LayerControl().add_to(map_dublin)
 
-    # Save the map to an HTML file
-    map_dublin.save(os.path.join(OUTPUT_DIR, "rail_and_atm_map.html"))
-    print("Map with rail stops and ATMs has been saved as 'rail_and_atm_map.html'.")
+    # Ensure the 'maps' directory exists
+    maps_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'maps')
+    if not os.path.exists(maps_dir):
+        os.makedirs(maps_dir)
 
-    return "maps/rail_and_atm_map.html"
+    # Save the map to an HTML file in the 'maps' directory
+    map_file_path = os.path.join(maps_dir, "rail_and_atm_map.html")
+    map_dublin.save(map_file_path)
+    print(f"Map with rail stops and ATMs has been saved as '{map_file_path}'.")
+
+    return map_file_path  # Return the full path to the map file
 
 
 # Create a map and plot the Luas line stops and DART stations

@@ -1,0 +1,86 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+#map-container {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+header,
+footer {
+  background-color: #f8f8f8;
+  padding: 10px;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+}
+
+/* map.css */
+/* Global reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+  font-family: 'Roboto', sans-serif;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+header {
+  background-color: #66A182;
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 10px 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+header img {
+  width: 40px;
+  height: 40px;
+  margin-right: 15px;  /* Space between icon and title */
+}
+
+footer {
+  background-color: #66A182;
+  color: #fff;
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 10px 0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+#map-container {
+  flex-grow: 1;
+  width: 100%;
+  margin-top: var(--header-height); /* Use dynamic value for margin */
+  margin-bottom: var(--footer-height); /* Use dynamic value for margin */
+  height: calc(100vh - var(--header-height) - var(--footer-height)); /* Adjust height dynamically */
+}
+
+iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
