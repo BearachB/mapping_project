@@ -23,6 +23,7 @@ This project visualizes Luas stops on a map using Python and folium. With plans 
 - Search API: Nominatim Geocoding (via geopy)
 
 ## Directory Structure
+```
 mapping_project/
 ├───backend                     # Core backend directory for the Flask application and data processing logic.
 │   │   app.py                  # Main Flask application file, handles routing and server logic.
@@ -63,7 +64,7 @@ mapping_project/
 ├───static                      # Root-level static directory for serving additional map assets (currently minimal).
 │   └───maps                    # Placeholder for additional static map files.
 └───venv                        # Virtual environment directory for managing Python dependencies.
-
+```
 ## Roadmap
 
 - [x]  Display Luas Green and Red Line stops with interactive markers.
