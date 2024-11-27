@@ -27,19 +27,16 @@
 </body>
 
 <script>
-  // Function to dynamically set CSS variables for header and footer heights
   function setDynamicHeights() {
-      const headerHeight = document.querySelector('header').offsetHeight;
-      const footerHeight = document.querySelector('footer').offsetHeight;
+    const headerHeight = document.querySelector('header').offsetHeight;
+    const footerHeight = document.querySelector('footer').offsetHeight;
 
-      // Set the CSS variables dynamically
-      document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
-      document.documentElement.style.setProperty('--footer-height', `${footerHeight}px`);
-  }
+    document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
+    document.documentElement.style.setProperty('--footer-height', `${footerHeight}px`);
+}
 
-  // Run the function on page load
-  window.addEventListener('load', setDynamicHeights);
-  window.addEventListener('resize', setDynamicHeights); // Optional: Recalculate on resize
+window.addEventListener('load', setDynamicHeights);
+window.addEventListener('resize', setDynamicHeights);
 </script>
 
 </html>
