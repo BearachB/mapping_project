@@ -1,4 +1,5 @@
 import React from 'react';
+import SearchBox from './SearchBox';
 
 const Header = () => {
   return (
@@ -9,6 +10,9 @@ const Header = () => {
         style={{ width: '32px', height: '32px', verticalAlign: 'bottom' }}
       />
       <h3 style={{ marginLeft: '10px' }}>Dublin Rail Map</h3>
+      <br></br>
+      <br></br>
+      <SearchBox></SearchBox>
     </header>
   );
 };

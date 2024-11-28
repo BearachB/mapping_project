@@ -1,4 +1,5 @@
 import React from 'react';
+import SearchBox from './SearchBox';
 
 const MapContainer = () => {
   return (
