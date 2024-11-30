@@ -92,4 +92,9 @@ out body;`
   - [ ] Take user input and use that to fetch location.
   - [ ] Zoom map to location and place marker. 
 - [ ] Implement walking time radius functionality around fetched address.
+- [x] Integrate Docker into backend and frontend.
+  - [x] Install Docker.
+  - [x] Backend & Frontend:
+    - [x] Create Dockerfile.
+    - [x] Create Dockerignore.
  Customize map markers with descriptive popups.
