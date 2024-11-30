@@ -2,10 +2,35 @@
 This project visualizes amenities on a map using Python, Folium and React. With plans to expand to expand to other public services with the aim of eventually tying it all together with housing locations, allowing you to make more informed decisions when choosing to buy or rent a house/apartment.
 
 ## Setup Instructions
-1. Clone the repository: `git clone https://github.com/BearachB/mapping_project.git`
-2. Create a virtual environment: `python3 -m venv venv`
-3. Activate the virtual environment: `source venv/bin/activate`
-4. Install dependencies: `pip install -r requirements.txt`
+### Local Setup (without Docker)
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/BearachB/mapping_project.git
+2. Docker Setup (Preferred):
+   1. Install Docker on your system.
+   2. Navigate to the project root directory.
+   3. Build and run the containers:
+      1. docker compose up --build
+   4. Access the application:
+      1. Frontend: http://localhost:3000
+      2. Backend API: http://localhost:5000
+3. Dockerless Setup:
+   1. Backend:
+      1. Navigate to the backend directory:
+         1. `cd mapping_project/backend`
+      2. Create and activate a virtual environment:
+         1. `python3 -m venv venv source venv/bin/activate  # On Windows use: venv\Scripts\activate`
+      3. Install dependencies:
+         1. `pip install -r requirements.txt`
+      4. Run Flask app:
+         1. `pip install -r requirements.txt`
+   2. Frontend:
+      1. Navigate to the frontend directory:
+         1. `cd ../frontend`
+      2. Install Node.js dependencies:
+         1. `npm install`
+      3. Start the React development server:
+         1. `npm start`
 
 ## Features
 - **Interactive Maps**: Displays Luas, DART, and other rail stations on an interactive map.
