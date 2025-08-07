@@ -19,7 +19,9 @@ This project visualizes amenities on a map using Python, Folium and React. With 
       1. Navigate to the backend directory:
          1. `cd mapping_project/backend`
       2. Create and activate a virtual environment:
-         1. `python3 -m venv venv source venv/bin/activate  # On Windows use: venv\Scripts\activate`
+         1. `python3 -m venv`
+         2. `venv source venv/bin/activate`
+         3. `# On Windows use: venv\Scripts\activate`
       3. Install dependencies:
          1. `pip install -r requirements.txt`
       4. Run Flask app:
